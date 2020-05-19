@@ -1,0 +1,26 @@
+version: '3'
+services:
+  hbase:
+    build:
+      context: ./hbase/
+      dockerfile: hbase.dockerfile
+    volumes:
+      - ./hbase/conf:/hbase/conf
+  hugegraph-server:
+    build:
+      context: ./hugegraph/server/
+      dockerfile: hugegraph-server.dockerfile
+    volumes:
+      - ./hugegraph/server/conf:/hugegraph-server/conf
+    depends_on:
+      - hbase
+  hugegraph-studio:
+    build:
+      context: ./hugegraph/studio/
+      dockerfile: hugegraph-studio.dockerfile
+    volumes:
+      - ./hugegraph/studio/conf:/hugegraph-studio/conf
+    ports:
+      - 8088:8088
+    depends_on:
+      - hugegraph-server
